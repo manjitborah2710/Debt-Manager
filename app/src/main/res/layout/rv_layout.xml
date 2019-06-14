@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginTop="8dp"
+    app:cardElevation="5dp"
+    android:elevation="3dp">
+    <RelativeLayout
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:textSize="20sp"
+            android:layout_alignParentStart="true"
+            android:id="@+id/toOrFrom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="To/From"
+            android:layout_alignParentLeft="true"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:textSize="20sp"
+            android:id="@+id/amt"
+            android:layout_alignParentEnd="true"
+            android:layout_marginLeft="10sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Amount"
+            android:layout_alignParentRight="true" />
+
+
+        <TextView
+            android:textSize="20sp"
+            android:id="@+id/name"
+            android:layout_marginLeft="10sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:layout_toRightOf="@id/toOrFrom"
+            android:layout_toEndOf="@id/toOrFrom"
+            android:layout_toStartOf="@id/amt"
+            android:layout_toLeftOf="@id/amt" />
+
+        <ImageButton android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_below="@id/toOrFrom"
+            android:id="@+id/edit_btn_in_rv_layout"
+            android:layout_marginTop="5dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:backgroundTint="@android:color/white"
+            android:src="@drawable/ic_edit_black_24dp"/>
+        <ImageButton
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_toRightOf="@id/edit_btn_in_rv_layout"
+            android:layout_toEndOf= "@id/edit_btn_in_rv_layout"
+            android:layout_below="@id/toOrFrom"
+            android:id="@+id/cancel_btn_in_rv_layout"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:backgroundTint="@android:color/white"
+            android:src="@drawable/ic_cancel_black_24dp"/>
+
+        <ImageButton
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_toRightOf="@id/cancel_btn_in_rv_layout"
+            android:layout_toEndOf= "@id/cancel_btn_in_rv_layout"
+            android:layout_below="@id/toOrFrom"
+            android:id="@+id/delete_btn_in_rv_layout"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:backgroundTint="@android:color/white"
+            android:src="@drawable/ic_delete_black_24dp"/>
+
+
+        <LinearLayout
+            android:id="@+id/ll_in_rv_layout"
+            android:visibility="gone"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/delete_btn_in_rv_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentLeft="true">
+            <EditText
+                android:id="@+id/update_payeeOrPayer_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Payee or payer name"
+                android:maxLines="1"
+                android:singleLine="true"/>
+            <EditText
+                android:id="@+id/update_name_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Money lent/borrowed for..."
+                android:maxLines="1"
+                android:singleLine="true"/>
+            <EditText
+                android:id="@+id/update_amt_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Amount"
+                android:inputType="numberDecimal"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:imeOptions="actionDone"/>
+            <RadioGroup
+                android:id="@+id/update_radiogroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <RadioButton
+                    android:id="@+id/update_borrowed_rb"
+                    android:padding="5sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Borrowed"
+                    android:textColor="#000"
+                    android:buttonTint="#000"/>
+                <RadioButton
+                    android:id="@+id/update_lent_rb"
+                    android:padding="5sp"
+                    android:layout_marginLeft="20sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Lent"
+                    android:textColor="#000"
+                    android:buttonTint="#000"/>
+            </RadioGroup>
+            <ImageButton
+                android:id="@+id/save_btn_in_rv_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@android:color/white"
+                android:src="@drawable/ic_save_black_24dp"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
