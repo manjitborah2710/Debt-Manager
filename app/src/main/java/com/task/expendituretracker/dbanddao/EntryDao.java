@@ -37,4 +37,7 @@ public interface EntryDao {
 
     @Query("delete from entries")
     public void deleteAll();
+
+    @Query("select * from entries")
+    public List<Entry> getAllEntriesNonLiveDataList();
 }

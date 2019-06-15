@@ -41,4 +41,7 @@ public class EntryViewModel extends AndroidViewModel {
     public void deleteAll(){
         entryRepository.deleteAll();
     }
+    public List<Entry> getAllEntriesNonLiveDataList(){
+        return entryRepository.getAllEntriesNonLiveDataList();
+    }
 }

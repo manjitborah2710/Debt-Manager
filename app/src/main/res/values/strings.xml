@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Debt Tracker</string>
+    <string name="warning_delete_all_db">This will clear the <u><b>entire database</b></u> and not just the search results. Please proceed with care</string>
 </resources>

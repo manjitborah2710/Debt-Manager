@@ -64,6 +64,12 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:imeOptions="actionDone"/>
+            <TextView
+                android:paddingLeft="5sp"
+                android:textColor="@android:color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Did you borrow or lend?"/>
             <RadioGroup
                 android:id="@+id/radioGroup"
                 android:layout_width="match_parent"
@@ -115,6 +121,7 @@
             android:id="@+id/search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:iconifiedByDefault="false"
             app:queryHint="Search for the name of payee/payer">
 
         </androidx.appcompat.widget.SearchView>

@@ -2,6 +2,7 @@ package com.task.expendituretracker.repositories;
 
 import android.app.Application;
 import android.os.AsyncTask;
+import android.util.Log;
 
 
 import androidx.lifecycle.LiveData;
@@ -10,6 +11,7 @@ import com.task.expendituretracker.dbanddao.EntryDao;
 import com.task.expendituretracker.dbanddao.EntryDatabase;
 import com.task.expendituretracker.models.Entry;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EntryRepository {
@@ -57,6 +59,10 @@ public class EntryRepository {
 
     public void deleteAll(){
         new DeleteAlltask(entryDao).execute();
+    }
+
+    public List<Entry> getAllEntriesNonLiveDataList(){
+        return entryDao.getAllEntriesNonLiveDataList();
     }
 
     class InsertTask extends AsyncTask<Entry,Void,Void>{
@@ -111,5 +117,6 @@ public class EntryRepository {
             return null;
         }
     }
+
 
 }

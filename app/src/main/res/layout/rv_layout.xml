@@ -114,6 +114,12 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:imeOptions="actionDone"/>
+            <TextView
+                android:paddingLeft="5sp"
+                android:textColor="@android:color/darker_gray"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Did you borrow or lend?"/>
             <RadioGroup
                 android:id="@+id/update_radiogroup"
                 android:layout_width="match_parent"

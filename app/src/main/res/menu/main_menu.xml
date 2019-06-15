@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/save_all_data_as_pdf"
+        android:title="save all"
+        android:icon="@drawable/ic_file_download_black_24dp"
+        app:showAsAction="always"
+        android:orderInCategory="1" />
     <item android:id="@+id/deleteAllMenuItem"
-        android:orderInCategory="1"
+        android:orderInCategory="2"
         android:title="Delete All"
         app:showAsAction="always"
         android:icon="@drawable/ic_delete_forever_black_24dp"/>
+
 </menu>
