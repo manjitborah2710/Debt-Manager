@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "870279601314",
+    "firebase_url": "https://debt-tracker-313e3.firebaseio.com",
+    "project_id": "debt-tracker-313e3",
+    "storage_bucket": "debt-tracker-313e3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:870279601314:android:3fa3f3dccb787d2c",
+        "android_client_info": {
+          "package_name": "com.task.expendituretracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "870279601314-2upid86hojje3j7frllk6ju205k4d4t1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.task.expendituretracker",
+            "certificate_hash": "afc1650a6be7902e279c8e21b9d4ab5374e27f7b"
+          }
+        },
+        {
+          "client_id": "870279601314-ua5dl49f44lgr5sb3pjbpg32g946qu03.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwrX640sqybUVuaLQ1zRwkdRZ-jPp0nNw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "870279601314-ua5dl49f44lgr5sb3pjbpg32g946qu03.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

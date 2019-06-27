@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SignInActivity"
+    android:orientation="vertical"
+    android:padding="15sp"
+    android:id="@+id/linearLayoutSignIn">
+
+    <LinearLayout
+        android:id="@+id/emailAndPwdFields_LinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_marginBottom="7dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Email:"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+
+        <EditText
+            android:padding="10sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/email_et"
+            android:background="@drawable/rect_bg"
+            android:layout_marginBottom="10dp"/>
+        <TextView
+            android:layout_marginBottom="7dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Password:"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+
+        <EditText
+            android:padding="10sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/pwd_et"
+            android:background="@drawable/rect_bg"
+            android:inputType="textPassword"/>
+
+        <TextView
+            android:paddingTop="10sp"
+            android:paddingBottom="10sp"
+            android:layout_marginTop="10dp"
+            android:id="@+id/forgot_pwd_tv"
+            android:gravity="left"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/forgot_password"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+
+
+        <RelativeLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:text="Sign In"
+                android:id="@+id/sign_in_btn"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:text="Register"
+                android:id="@+id/register_btn"/>
+
+        </RelativeLayout>
+    </LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:id="@+id/verification_relative_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_margin="10dp"
+                android:id="@+id/verification_icon_iv"
+                android:padding="10dp"
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/unverified_tick"/>
+
+            <TextView
+                android:layout_marginBottom="10dp"
+                android:layout_below="@+id/verification_icon_iv"
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NOT VERIFIED"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="#f00"
+                android:textStyle="bold"
+                android:id="@+id/verification_textview"/>
+            <Button
+                android:layout_margin="10dp"
+                android:layout_below="@+id/verification_textview"
+                android:id="@+id/logout_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Logout"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:background="@color/success_green"
+                android:textColor="@android:color/white"/>
+
+            <Button
+                android:layout_margin="10dp"
+                android:layout_below="@+id/verification_textview"
+                android:id="@+id/delete_account_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete Account"
+                android:layout_toEndOf="@+id/logout_btn"
+                android:layout_toRightOf="@+id/logout_btn"
+                android:layout_toLeftOf="@+id/verify_btn"
+                android:layout_toStartOf="@+id/verify_btn"
+                android:background="@color/red"
+                android:textColor="@android:color/white" />
+
+            <Button
+                android:layout_margin="10dp"
+                android:layout_below="@+id/verification_textview"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Verify"
+                android:id="@+id/verify_btn"
+                android:textColor="@android:color/white"
+                android:background="@color/verified_color"/>
+            <TextView
+                android:id="@+id/info_tv"
+                android:layout_below="@id/delete_account_btn"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/info"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@android:color/black"/>
+
+            <TextView
+                android:id="@+id/reset_pwd_tv"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/reset_password"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:layout_below="@+id/info_tv"/>
+
+        </RelativeLayout>
+    </ScrollView>
+
+
+
+</LinearLayout>

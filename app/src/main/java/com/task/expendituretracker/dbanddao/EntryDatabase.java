@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase;
 
 import com.task.expendituretracker.models.Entry;
 
-@Database(entities = {Entry.class},version = 1)
+@Database(entities = {Entry.class},version = 1,exportSchema = false)
 public abstract class EntryDatabase extends RoomDatabase {
     public abstract EntryDao getDao();
 

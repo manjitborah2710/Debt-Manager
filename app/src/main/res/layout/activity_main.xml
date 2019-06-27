@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:animateLayoutChanges="true">
+    android:animateLayoutChanges="true"
+    android:id="@+id/coordinatorLayout">
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -133,7 +134,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_gravity="bottom">
+            android:layout_gravity="bottom"
+            android:focusedByDefault="true">
             <TextView
                 android:paddingLeft="5sp"
                 android:layout_width="wrap_content"

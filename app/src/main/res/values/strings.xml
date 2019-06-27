@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">Debt Tracker</string>
     <string name="warning_delete_all_db">This will clear the <u><b>entire database</b></u> and not just the search results. Please proceed with care</string>
+    <string name="info">
+
+        \n<b>(If changes are not reflected click the refresh button on the top)</b>\n\n1. Verification is necessary for resetting passwords\n\n2. Without verification of the email, you shall not be able to keep backup of the data deleted from your local storage\n\n
+    </string>
+    <string name="reset_password"><a href="#">Reset Password</a></string>
+    <string name="forgot_password"><a href="#">Forgot Password</a></string>
 </resources>

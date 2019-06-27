@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="20sp">
+    <ProgressBar
+        android:id="@+id/pb_loading_box"
+        android:padding="5sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/pb_loading_box"
+        android:padding="5sp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:text="Please wait"
+        android:layout_toRightOf="@+id/pb_loading_box"
+        android:layout_alignParentRight="true" />
+
+
+</RelativeLayout>

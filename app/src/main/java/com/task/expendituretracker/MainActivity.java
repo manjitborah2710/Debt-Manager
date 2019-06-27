@@ -1,8 +1,10 @@
 package com.task.expendituretracker;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LiveData;
@@ -12,27 +14,45 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
@@ -42,6 +62,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.task.expendituretracker.adapters.MyRVAdapter;
+import com.task.expendituretracker.alerts.CancelableMessageDisplayerAlert;
 import com.task.expendituretracker.models.Entry;
 import com.task.expendituretracker.repositories.EntryRepository;
 import com.task.expendituretracker.viewmodels.EntryViewModel;
@@ -55,6 +76,26 @@ import java.util.Calendar;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    final static int RESULT_NOT_PERFORMED=1;
+    final static int RESULT_SUCCESSFUL=2;
+    final static int RESULT_EMPTY=3;
+    final static int RESULT_COULD_NOT_CREATE_DIRECTORY=4;
+    final static int RESULT_EXCEPTION=5;
+    final static int RESULT_VERIFICATION_EMAIL_SENT=6;
+
+    final static int REQUEST_SIGN_IN=1111;
+    final static int REQUEST_ONLINE_OPTIONS=7;
+
+    FirebaseAuth firebaseAuth;
+    FirebaseUser firebaseUser;
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
+
+    CoordinatorLayout coordinatorLayout;
+
+
+
     public FloatingActionButton fab;
     LinearLayout llForOptions,billTotal,billIndiv;
     Button save,cancel;
@@ -72,6 +113,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        coordinatorLayout=findViewById(R.id.coordinatorLayout);
+
         billIndiv=findViewById(R.id.search_result_bill);
         billTotal=findViewById(R.id.search_result_total);
         searchView=findViewById(R.id.search);
@@ -264,7 +308,10 @@ public class MainActivity extends AppCompatActivity {
     }
     private void deleteAllEntriesHelper(){
         AlertDialog.Builder builder=new AlertDialog.Builder(this);
-        builder.setTitle("Delete everything ?").setMessage(R.string.warning_delete_all_db)
+        View view= LayoutInflater.from(this).inflate(R.layout.delete_all_dialog_view,null,false);
+        final CheckBox doSaveOnline=view.findViewById(R.id.save_to_firebase_checkbox);
+
+        builder.setView(view).setTitle("Delete everything ?").setMessage(R.string.warning_delete_all_db)
                 .setCancelable(true)
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
@@ -275,7 +322,8 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton("CLEAR ENTIRE DATABASE", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        entryViewModel.deleteAll();
+                        saveToFirebase(doSaveOnline.isChecked());
+
                         dialog.dismiss();
                     }
                 });
@@ -288,11 +336,98 @@ public class MainActivity extends AppCompatActivity {
 
                 dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.success_green));
 
-
             }
         });
         dialog.show();
     }
+
+    public void saveToFirebase(boolean isChecked){
+        if(isChecked){
+            firebaseAuth=FirebaseAuth.getInstance();
+            firebaseUser=firebaseAuth.getCurrentUser();
+            if(firebaseUser==null){
+                CancelableMessageDisplayerAlert.showCancelableMessageDisplayerAlert(this,"Authentication failure","You are not signed in. Sign in and verify your email to backup data");
+                return;
+            }
+            if(!firebaseUser.isEmailVerified()){
+                CancelableMessageDisplayerAlert.showCancelableMessageDisplayerAlert(this,"Verification failure","Your Email is not verified yet. Verify your email to backup data. Click on the last button at the top to go the account section to verify your email");
+                return;
+            }
+            proceedSaveToFirebase();
+
+
+        }
+        else {
+            entryViewModel.deleteAll();
+        }
+    }
+
+    public void proceedSaveToFirebase(){
+        AsyncTask<Void,Void,List<Entry>> task=new AsyncTask<Void, Void, List<Entry>>() {
+            @Override
+            protected List<Entry> doInBackground(Void... voids) {
+                List<Entry> entries= entryViewModel.getAllEntriesNonLiveDataList();
+                return entries;
+            }
+
+            @Override
+            protected void onPostExecute(List<Entry> entries) {
+                super.onPostExecute(entries);
+                upload(entries);
+            }
+        };
+
+        task.execute();
+
+    }
+
+    int count=0;
+    int successful_count=0;
+    public void upload(List<Entry> entryList){
+        if(entryList.size()==0) {
+            Snackbar.make(coordinatorLayout,"Nothing to upload",Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+        View view=LayoutInflater.from(this).inflate(R.layout.progress_of_upload,null,false);
+        final TextView uploadProgress=view.findViewById(R.id.upload_progress_tv);
+        final ProgressBar progressBar=view.findViewById(R.id.pb_upload);
+        final TextView doneTv=view.findViewById(R.id.done_tv);
+        final int max=entryList.size();
+        progressBar.setMax(max);
+        AlertDialog.Builder builder=new AlertDialog.Builder(this).setCancelable(false);
+        builder.setTitle("Do not close the application");
+        builder.setView(view);
+        final AlertDialog dialog=builder.create();
+        dialog.show();
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("dd-MM-YYYY");
+        databaseReference= FirebaseDatabase.getInstance().getReference();
+
+        count=0;
+        successful_count=0;
+        for(Entry e:entryList){
+            final Entry e_inner=e;
+            databaseReference.child("users").child(firebaseUser.getUid()).child(simpleDateFormat.format(Calendar.getInstance().getTime())).push().setValue(e).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(task.isSuccessful()){
+                        entryViewModel.deleteEntry(e_inner);
+                        successful_count++;
+                    }
+                    else{
+
+                    }
+                    count++;
+                    uploadProgress.setText(count+"/"+max);
+                    progressBar.setProgress(count);
+                    if(count>=max) {
+                        doneTv.setText("Done\n"+"Successfully uploaded = "+successful_count+"\n"+"Failed = "+(max-successful_count));
+                        dialog.setCancelable(true);
+                    }
+                }
+            });
+        }
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -305,6 +440,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.deleteAllMenuItem:{
+                hideKeyboard(this);
                 deleteAllEntriesHelper();
                 return true;
             }
@@ -312,15 +448,22 @@ public class MainActivity extends AppCompatActivity {
                 downloadPdf();
                 return true;
             }
+            case R.id.account_menu_item:{
+                startActivityForResult(new Intent(MainActivity.this,SignInActivity.class),REQUEST_SIGN_IN);
+                return true;
+            }
+            case R.id.online_options_menu_item:{
+                startActivityForResult(new Intent(MainActivity.this,OnlineActivity.class),REQUEST_ONLINE_OPTIONS);
+                return true;
+            }
             default:{
                 return super.onOptionsItemSelected(item);
             }
         }
     }
-    Boolean permission;
+
     public void downloadPdf(){
         AlertDialog.Builder builder=new AlertDialog.Builder(this);
-        permission=false;
         builder.setTitle("Save report as PDF?")
                 .setCancelable(false)
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
@@ -411,11 +554,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    final int RESULT_NOT_PERFORMED=1;
-    final int RESULT_SUCCESSFUL=2;
-    final int RESULT_EMPTY=3;
-    final int RESULT_COULD_NOT_CREATE_DIRECTORY=4;
-    final int RESULT_EXCEPTION=5;
+
 
     private int saveAsPdfTask(List<Entry> entries){
         int result=RESULT_NOT_PERFORMED;
@@ -534,4 +673,19 @@ public class MainActivity extends AppCompatActivity {
         return result;
 
     }
+
+    private static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View view = activity.getCurrentFocus();
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+    private void hideKeyboard(View view) {
+        InputMethodManager im = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        im.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+
 }

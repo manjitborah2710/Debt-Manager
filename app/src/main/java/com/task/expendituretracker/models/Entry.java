@@ -14,6 +14,10 @@ public class Entry {
     private float amount;
     private int to;
 
+    public Entry(){
+
+    }
+
     public Entry(String toOrFrom, String name, float amount, int to) {
         this.toOrFrom = toOrFrom;
         this.name = name;
